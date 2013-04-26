@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Rssclient by desarrolla2</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Rssclient</h1>
+        <p>Service for provide RSS client in your website</p>
+
+        <p class="view"><a href="https://github.com/desarrolla2/RSSClient">View the Project on GitHub <small>desarrolla2/RSSClient</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/desarrolla2/RSSClient/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/desarrolla2/RSSClient/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/desarrolla2/RSSClient">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>RSSClient</h1>
+
+<p><a href="http://travis-ci.org/desarrolla2/RSSClient"><img src="https://secure.travis-ci.org/desarrolla2/RSSClient.png" alt="Build Status"></a></p>
+
+<p>RSSClient is a simple to use RSS library to fetch and use RSS feeds.
+RSSClient is very fast!</p>
+
+<p>You can read the RSS specification on <a href="http://cyber.law.harvard.edu/rss/rss.html">RFC</a></p>
+
+<p>RSSClient Support Atom1.0 now.</p>
+
+<h2>Installation</h2>
+
+<h3>With Composer</h3>
+
+<p>It is best installed it through <a href="http://packagist.org/packages/desarrolla2/rss-client">packagist</a> 
+by including
+<code>desarrolla2/rss-client</code> in your project composer.json require:</p>
+
+<div class="highlight"><pre>    <span class="s2">"require"</span><span class="err">:</span> <span class="p">{</span>
+        <span class="err">//</span> <span class="err">...</span>
+        <span class="nt">"desarrolla2/rss-client"</span><span class="p">:</span>  <span class="s2">"dev-master"</span>
+    <span class="p">}</span>
+</pre></div>
+
+<h3>Without Composer</h3>
+
+<p>You can also download it from <a href="https://github.com/desarrolla2/RSSClient">Github</a>, 
+but no autoloader is provided so you'll need to register it with your own PSR-0 
+compatible autoloader.</p>
+
+<h2>Usage</h2>
+
+<h3>Without Cache</h3>
+
+<p>This example does not use any cache, so it probably will be too slow to be used on 
+a website, you should implement your system cache, or use the cache system described below</p>
+
+<div class="highlight"><pre>    <span class="o">&lt;?</span><span class="nx">php</span>
+
+    <span class="k">use</span> <span class="nx">Desarrolla2\RSSClient\RSSClient</span><span class="p">;</span>
+
+    <span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RSSClient</span><span class="p">();</span>
+
+    <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">addFeeds</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+            <span class="s1">'http://news.ycombinator.com/rss'</span><span class="p">,</span>
+            <span class="s1">'http://feeds.feedburner.com/TechCrunch/'</span><span class="p">,</span>
+                <span class="p">),</span> <span class="s1">'news'</span>
+        <span class="p">);</span>
+
+    <span class="nv">$feeds</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">fetch</span><span class="p">(</span><span class="s1">'news'</span><span class="p">);</span>
+
+</pre></div>
+
+<h3>With Cache</h3>
+
+<p>This example uses the cache implemented by Seller desarrolla2/cache you must 
+select the adapter depending on your needs, you can find all the info in the 
+repository <a href="https://github.com/desarrolla2/Cache">Github</a>.</p>
+
+<div class="highlight"><pre>    <span class="o">&lt;?</span><span class="nx">php</span>
+
+    <span class="k">use</span> <span class="nx">Desarrolla2\RSSClient\Cache\RSSClient</span><span class="p">;</span>
+    <span class="k">use</span> <span class="nx">Desarrolla2\Cache\Cache</span><span class="p">;</span>
+    <span class="k">use</span> <span class="nx">Desarrolla2\Cache\Adapter\File</span><span class="p">;</span>
+
+    <span class="c1">// It is important that you select and configure your cache adapter</span>
+    <span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RSSClient</span><span class="p">());</span>
+    <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">setCache</span><span class="p">(</span><span class="k">new</span> <span class="nx">Cache</span><span class="p">(</span><span class="k">new</span> <span class="nx">File</span><span class="p">(</span><span class="s1">'/tmp'</span><span class="p">)));</span>
+
+</pre></div>
+
+<p>You can see how to configure desarrolla2/cache in its <a href="https://github.com/desarrolla2/Cache">README</a></p>
+
+<p>The rest of the procedure is exactly the same as if you were using the client without cache.</p>
+
+<div class="highlight"><pre>    <span class="o">&lt;?</span><span class="nx">php</span>
+
+    <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">addFeeds</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+        <span class="s1">'http://news.ycombinator.com/rss'</span><span class="p">,</span>
+        <span class="s1">'http://feeds.feedburner.com/TechCrunch/'</span><span class="p">,</span>
+        <span class="p">),</span> <span class="s1">'news'</span>
+    <span class="p">));</span>
+
+    <span class="nv">$feeds</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">fetch</span><span class="p">(</span><span class="s1">'news'</span><span class="p">);</span>
+
+</pre></div>
+
+<h2>Formats</h2>
+
+<ul>
+<li>RSS20</li>
+<li>Atom10</li>
+</ul><h2>Code Coverage</h2>
+
+<p>Do you want to see RSSClient Code Coverage see <a href="http://rssclient.desarrolla2.com/coverage/index.html">here</a></p>
+
+<h2>Contact</h2>
+
+<p>You can contact with me on <a href="https://twitter.com/desarrolla2">twitter</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/desarrolla2">desarrolla2</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
